@@ -1,0 +1,26 @@
+.wp-block-comment-template ol {
+	padding-left: min(2.75rem, 7.2vw);
+}
+
+.is-style-typescale-comment-edit-link a,
+.is-style-typescale-comment-reply-link a {
+	border: 1px solid var(--wp--preset--color--contrast-4);
+	border-radius: 4px;
+	display: inline-flex;
+	padding: 0.33em 0.5em;
+	transition: all 0.1s linear;
+}
+
+:root .is-style-typescale-comment-edit-link a:hover,
+:root .is-style-typescale-comment-reply-link a:hover {
+	background-color: var(--wp--preset--color--contrast-4);
+	color: var(--wp--preset--color--contrast);
+	text-decoration: none;
+}
+
+.wp-block-comment-content > *:first-child {
+	margin-top: 0;
+}
+.wp-block-comment-content > *:last-child {
+	margin-bottom: 0;
+}
