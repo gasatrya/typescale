@@ -8,60 +8,10 @@
  * @since Typescale 1.0
  */
 
-
-/**
- * Declare theme supports.
- *
- * @since Typescale 1.0
- * @return void
- */
-function typescale_setup() {
-	add_editor_style( array( 'style.css' ) );
-}
-add_action( 'after_setup_theme', 'typescale_setup' );
-
-
-/**
- * Enqueue stylesheets.
- *
- * @since Typescale 1.0
- * @return void
- */
-function typescale_styles() {
-	wp_enqueue_style( 'typescale-styles', get_template_directory_uri() . '/style.css', array(), wp_get_theme( 'typescale' )->get( 'Version' ) );
-}
-add_action( 'wp_enqueue_scripts', 'typescale_styles' );
-
-
-/**
- * Add custom template part areas.
- */
-if ( ! function_exists( 'typescale_template_part_areas' ) ) :
-	/**
-	 * Add custom template part areas
-	 *
-	 * @since Typescale 1.0
-	 * @return array
-	 */
-	function typescale_template_part_areas( array $areas ) {
-		$areas[] = array(
-			'area'        => 'posts',
-			'area_tag'    => 'section',
-			'icon'        => 'symbolFilledIcon',
-			'label'       => __( 'Posts', 'typescale' ),
-			'description' => __( 'Different layouts for the posts list', 'typescale' ),
-		);
-
-		return $areas;
-	}
-endif;
-
-add_filter( 'default_wp_template_part_areas', 'typescale_template_part_areas' );
-
-
 /**
  * Register block styles.
  */
+
 if ( ! function_exists( 'typescale_block_styles' ) ) :
 	/**
 	 * Register custom block styles
@@ -72,78 +22,134 @@ if ( ! function_exists( 'typescale_block_styles' ) ) :
 	function typescale_block_styles() {
 
 		register_block_style(
-			'core/comment-edit-link',
+			'core/details',
 			array(
-				'name'  => 'typescale-comment-edit-link',
-				'label' => __( 'Button', 'typescale' ),
+				'name'         => 'arrow-icon-details',
+				'label'        => __( 'Arrow icon', 'typescale' ),
+				/*
+				 * Styles for the custom Arrow icon style of the Details block
+				 */
+				'inline_style' => '
+				.is-style-arrow-icon-details {
+					padding-top: var(--wp--preset--spacing--10);
+					padding-bottom: var(--wp--preset--spacing--10);
+				}
+
+				.is-style-arrow-icon-details summary {
+					list-style-type: "\2193\00a0\00a0\00a0";
+				}
+
+				.is-style-arrow-icon-details[open]>summary {
+					list-style-type: "\2192\00a0\00a0\00a0";
+				}',
 			)
 		);
-
-		register_block_style(
-			'core/comment-reply-link',
-			array(
-				'name'  => 'typescale-comment-reply-link',
-				'label' => __( 'Button', 'typescale' ),
-			)
-		);
-
-		register_block_style(
-			'core/list',
-			array(
-				'name'  => 'typescale-list-checkmark',
-				'label' => __( 'Checkmark list', 'typescale' ),
-			)
-		);
-
-		register_block_style(
-			'core/list',
-			array(
-				'name'  => 'typescale-list-checkmark-disc',
-				'label' => __( 'Circled checkmark list', 'typescale' ),
-			)
-		);
-
-		register_block_style(
-			'core/post-comments-number',
-			array(
-				'name'  => 'typescale-post-comments-number-icon',
-				'label' => __( 'With icon', 'typescale' ),
-			)
-		);
-
-		register_block_style(
-			'core/post-excerpt',
-			array(
-				'name'  => 'typescale-clamp-lines-2',
-				'label' => __( 'Clamp: 2 lines', 'typescale' ),
-			)
-		);
-
-		register_block_style(
-			'core/post-excerpt',
-			array(
-				'name'  => 'typescale-clamp-lines-3',
-				'label' => __( 'Clamp: 3 lines', 'typescale' ),
-			)
-		);
-
 		register_block_style(
 			'core/post-terms',
 			array(
-				'name'  => 'typescale-post-terms',
-				'label' => __( 'Outlined terms', 'typescale' ),
+				'name'         => 'pill',
+				'label'        => __( 'Pill', 'typescale' ),
+				/*
+				 * Styles variation for post terms
+				 * https://github.com/WordPress/gutenberg/issues/24956
+				 */
+				'inline_style' => '
+				.is-style-pill a,
+				.is-style-pill span:not([class], [data-rich-text-placeholder]) {
+					display: inline-block;
+					background-color: var(--wp--preset--color--base-2);
+					padding: 0.375rem 0.875rem;
+					border-radius: var(--wp--preset--spacing--20);
+				}
+
+				.is-style-pill a:hover {
+					background-color: var(--wp--preset--color--contrast-3);
+				}',
 			)
 		);
+		register_block_style(
+			'core/list',
+			array(
+				'name'         => 'checkmark-list',
+				'label'        => __( 'Checkmark', 'typescale' ),
+				/*
+				 * Styles for the custom checkmark list block style
+				 * https://github.com/WordPress/gutenberg/issues/51480
+				 */
+				'inline_style' => '
+				ul.is-style-checkmark-list {
+					list-style-type: "\2713";
+				}
 
+				ul.is-style-checkmark-list li {
+					padding-inline-start: 1ch;
+				}',
+			)
+		);
+		register_block_style(
+			'core/navigation-link',
+			array(
+				'name'         => 'arrow-link',
+				'label'        => __( 'With arrow', 'typescale' ),
+				/*
+				 * Styles for the custom arrow nav link block style
+				 */
+				'inline_style' => '
+				.is-style-arrow-link .wp-block-navigation-item__label:after {
+					content: "\2197";
+					padding-inline-start: 0.25rem;
+					vertical-align: middle;
+					text-decoration: none;
+					display: inline-block;
+				}',
+			)
+		);
+		register_block_style(
+			'core/heading',
+			array(
+				'name'         => 'asterisk',
+				'label'        => __( 'With asterisk', 'typescale' ),
+				'inline_style' => "
+				.is-style-asterisk:before {
+					content: '';
+					width: 1.5rem;
+					height: 3rem;
+					background: var(--wp--preset--color--contrast-2, currentColor);
+					clip-path: path('M11.93.684v8.039l5.633-5.633 1.216 1.23-5.66 5.66h8.04v1.737H13.2l5.701 5.701-1.23 1.23-5.742-5.742V21h-1.737v-8.094l-5.77 5.77-1.23-1.217 5.743-5.742H.842V9.98h8.162l-5.701-5.7 1.23-1.231 5.66 5.66V.684h1.737Z');
+					display: block;
+				}
+
+				/* Hide the asterisk if the heading has no content, to avoid using empty headings to display the asterisk only, which is an A11Y issue */
+				.is-style-asterisk:empty:before {
+					content: none;
+				}
+
+				.is-style-asterisk:-moz-only-whitespace:before {
+					content: none;
+				}
+
+				.is-style-asterisk.has-text-align-center:before {
+					margin: 0 auto;
+				}
+
+				.is-style-asterisk.has-text-align-right:before {
+					margin-left: auto;
+				}
+
+				.rtl .is-style-asterisk.has-text-align-left:before {
+					margin-right: auto;
+				}",
+			)
+		);
 	}
 endif;
 
 add_action( 'init', 'typescale_block_styles' );
 
-
 /**
  * Enqueue block stylesheets.
  */
+
 if ( ! function_exists( 'typescale_block_stylesheets' ) ) :
 	/**
 	 * Enqueue custom block stylesheets
@@ -152,44 +158,32 @@ if ( ! function_exists( 'typescale_block_stylesheets' ) ) :
 	 * @return void
 	 */
 	function typescale_block_stylesheets() {
-
-		$typescale_styled_blocks = array(
-			'core/comments'                 => 'comments',
-			'core/footnotes'                => 'footnotes',
-			'core/list'                     => 'list',
-			'core/navigation'               => 'navigation',
-			'core/paragraph'                => 'paragraph',
-			'core/post-comments-form'       => 'post-comments-form',
-			'core/post-excerpt'             => 'post-excerpt',
-			'core/post-featured-image'      => 'post-featured-image',
-			'core/post-terms'               => 'post-terms',
-			'core/query-pagination-numbers' => 'query-pagination-numbers',
-			'core/search'                   => 'search',
-			'core/social-links'             => 'social-links',
-			'jetpack/sharing-buttons'       => 'jetpack-sharing-buttons',
-			'jetpack/subscriptions'         => 'jetpack-subscriptions',
+		/**
+		 * The wp_enqueue_block_style() function allows us to enqueue a stylesheet
+		 * for a specific block. These will only get loaded when the block is rendered
+		 * (both in the editor and on the front end), improving performance
+		 * and reducing the amount of data requested by visitors.
+		 *
+		 * See https://make.wordpress.org/core/2021/12/15/using-multiple-stylesheets-per-block/ for more info.
+		 */
+		wp_enqueue_block_style(
+			'core/button',
+			array(
+				'handle' => 'typescale-button-style-outline',
+				'src'    => get_parent_theme_file_uri( 'assets/css/button-outline.css' ),
+				'ver'    => wp_get_theme( get_template() )->get( 'Version' ),
+				'path'   => get_parent_theme_file_path( 'assets/css/button-outline.css' ),
+			)
 		);
-
-		foreach ( $typescale_styled_blocks as $block_name_with_namespace => $block_name ) {
-			wp_enqueue_block_style(
-				$block_name_with_namespace,
-				array(
-					'handle' => 'typescale-' . $block_name,
-					'src'    => get_template_directory_uri() . '/assets/css/blocks/' . $block_name . '.css',
-					'path'   => get_template_directory() . '/assets/css/blocks/' . $block_name . '.css',
-				)
-			);
-		}
-
 	}
 endif;
 
 add_action( 'init', 'typescale_block_stylesheets' );
 
-
 /**
  * Register pattern categories.
  */
+
 if ( ! function_exists( 'typescale_pattern_categories' ) ) :
 	/**
 	 * Register pattern categories
@@ -200,203 +194,13 @@ if ( ! function_exists( 'typescale_pattern_categories' ) ) :
 	function typescale_pattern_categories() {
 
 		register_block_pattern_category(
-			'typescale',
+			'typescale_page',
 			array(
-				'label'       => _x( 'Typescale', 'Block pattern category', 'typescale' ),
-				'description' => __( 'Patterns included in the Typescale theme.', 'typescale' ),
-			)
-		);
-
-		register_block_pattern_category(
-			'typescale-pages',
-			array(
-				'label'       => _x( 'Typescale Page Layouts', 'Block pattern category', 'typescale' ),
-				'description' => __( 'Full page layouts.', 'typescale' ),
+				'label'       => _x( 'Pages', 'Block pattern category', 'typescale' ),
+				'description' => __( 'A collection of full page layouts.', 'typescale' ),
 			)
 		);
 	}
 endif;
 
 add_action( 'init', 'typescale_pattern_categories' );
-
-
-/**
- * Check if a block is registered.
- */
-if ( ! function_exists( 'typescale_is_block_registered' ) ) :
-	/**
-	 * Check if a block is registered
-	 *
-	 * @since Typescale 1.0
-	 * @return bool
-	 */
-	function typescale_is_block_registered( $block_name ) {
-		$registry = WP_Block_Type_Registry::get_instance();
-		return $registry->get_registered( $block_name );
-	}
-endif;
-
-
-/**
- * Register custom block bindings.
- */
-if ( ! function_exists( 'typescale_register_block_bindings' ) ) :
-	/**
-	 * Register custom block bindings
-	 *
-	 * @since Typescale 1.0
-	 * @return void
-	 */
-	function typescale_register_block_bindings() {
-
-		/*
-		 * Copyright character with current year.
-		 */
-		register_block_bindings_source(
-			'typescale/copyright-year',
-			array(
-				'label'              => __( 'Copyright year', 'typescale' ),
-				'get_value_callback' => 'typescale_block_binding_callback_copyright_year',
-			)
-		);
-
-		/*
-		 * Comments count for the current post.
-		 */
-		register_block_bindings_source(
-			'typescale/post-comments-count',
-			array(
-				'label'              => __( 'Post comments count', 'typescale' ),
-				'get_value_callback' => 'typescale_block_binding_callback_post_comments_count',
-			)
-		);
-
-		/*
-		 * Post reading time for the current post.
-		 */
-		register_block_bindings_source(
-			'typescale/post-reading-time',
-			array(
-				'label'              => __( 'Post reading time', 'typescale' ),
-				'get_value_callback' => 'typescale_block_binding_callback_post_reading_time',
-			)
-		);
-
-	}
-endif;
-
-add_action( 'init', 'typescale_register_block_bindings' );
-
-
-/*
- * Block bindings callback:
- * Copyright character with current year.
- */
-if ( ! function_exists( 'typescale_block_binding_callback_copyright_year' ) ) :
-	/**
-	 * Block bindings callback
-	 * Copyright character with current year
-	 *
-	 * @since Typescale 1.0
-	 * @return string
-	 */
-	function typescale_block_binding_callback_copyright_year() {
-		return '&copy; ' . date( 'Y' );
-	}
-endif;
-
-
-/*
- * Block bindings callback:
- * Post comments count.
- */
-
-if ( ! function_exists( 'typescale_block_binding_callback_post_comments_count' ) ) :
-	/**
-	 * Block bindings callback
-	 * Post comments count.
-	 *
-	 * @since Typescale 1.0
-	 * @return string
-	 */
-	function typescale_block_binding_callback_post_comments_count( array $source_args, WP_Block $block_instance, string $attribute_name ) {
-		$post_id = $block_instance->context['postId'] ?? get_the_ID();
-
-		if ( ! comments_open( $post_id ) ) {
-			return false;
-		}
-
-		$comments_link  = '<a class="typescale-comment-count-link" href="' . esc_url( get_comments_link( $post_id ) ) . '">';
-		$comments_link .= '<span class="count">' . esc_html( get_comments_number( $post_id ) ) . '</span>';
-		$comments_link .= '</a>';
-
-		return $comments_link;
-
-	}
-endif;
-
-
-/*
- * Block bindings callback:
- * Post reading time.
- */
-if ( ! function_exists( 'typescale_block_binding_callback_post_reading_time' ) ) :
-	/**
-	 * Block bindings callback
-	 * Post reading time.
-	 *
-	 * @since Typescale 1.0
-	 * @return string
-	 */
-	function typescale_block_binding_callback_post_reading_time( array $source_args, WP_Block $block_instance, string $attribute_name ) {
-
-		$post_id = $block_instance->context['postId'] ?? get_the_ID();
-
-		/*
-		 * Calculate the reading time.
-		 *
-		 * Based on code by Justin Tadlock.
-		 * https://github.com/x3p0-dev/x3p0-ideas/blob/master/src/Bindings/Post.php
-		 */
-
-		// Set words per minute to 200.
-		$words_per_min = 200;
-
-		// Strip tags and get the word count from the content.
-		$count = str_word_count( strip_tags( apply_filters( 'the_content', get_post_field( 'post_content', $post_id ) ) ) );
-
-		// Get the ceiling for minutes.
-		$time_mins  = intval( ceil( $count / $words_per_min ) );
-		$time_hours = 0;
-
-		// If more than 60 mins, calculate hours and get leftover mins.
-		if ( 60 <= $time_mins ) {
-			$time_hours = intval( floor( $time_mins / 60 ) );
-			$time_mins  = intval( $time_mins % 60 );
-		}
-
-		// Set up text for hours.
-		$text_hours = sprintf(
-			_n( '%d hour', '%d hours', $time_hours, 'typescale' ),
-			number_format_i18n( $time_hours )
-		);
-
-		// Set up text for minutes.
-		$text_mins = sprintf(
-			_n( '%d min', '%d min', $time_mins, 'typescale' ),
-			number_format_i18n( $time_mins )
-		);
-
-		// If there are no hours, just return the minutes.
-		// If there are no minutes, just return the hours.
-		if ( 0 >= $time_hours ) {
-			return sprintf( esc_html_x( '%s read', '%s = hours/minutes', 'typescale' ), $text_mins );
-		} elseif ( 0 >= $time_mins ) {
-			return sprintf( esc_html_x( '%s read', '%s = hours/minutes', 'typescale' ), $text_hours );
-		}
-
-		// Merge hours + minutes text.
-		return sprintf( esc_html_x( '%1$s %2$s read', '%1$s = hours, %2$s = minutes', 'typescale' ), $text_hours, $text_mins );
-
-	}
-endif;

@@ -5,20 +5,11 @@
  * Inserter: no
  */
 ?>
-<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|40"}},"layout":{"type":"constrained","contentSize":"21em"}} -->
-<div class="wp-block-group">
-	<!-- wp:heading {"textAlign":"center","level":1} -->
-	<h1 class="wp-block-heading has-text-align-center" id="page-not-found"><?php echo esc_html_x( 'Error 404', 'Heading for a webpage that is not found', 'typescale' ); ?></h1>
-	<!-- /wp:heading -->
 
-	<!-- wp:paragraph {"align":"center"} -->
-	<p class="has-text-align-center"><?php echo esc_html_x( 'We can’t find the page you’re looking for. Go back to the front page, or try the search form below.', 'Message to convey that a webpage could not be found', 'typescale' ); ?></p>
-	<!-- /wp:paragraph -->
-</div>
-<!-- /wp:group -->
-
-<!-- wp:group {"layout":{"type":"constrained","contentSize":"240px"}} -->
-<div class="wp-block-group">
-	<!-- wp:pattern {"slug":"typescale/hidden-search"} /-->
-</div>
-<!-- /wp:group -->
+<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading" id="page-not-found"><?php echo esc_html_x( 'Page Not Found', 'Heading for a webpage that is not found', 'typescale' ); ?></h1>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p><?php echo esc_html_x( 'The page you are looking for does not exist, or it has been moved. Please try searching using the form below.', 'Message to convey that a webpage could not be found', 'typescale' ); ?></p>
+<!-- /wp:paragraph -->
+<!-- wp:pattern {"slug":"typescale/hidden-search"} /-->
